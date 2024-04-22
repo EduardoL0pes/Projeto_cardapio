@@ -20,7 +20,9 @@ cartBtn.addEventListener('click', () => {
 
 //Fechar Modal
 cartModal.addEventListener('click', (event) => {
-    if (event.target === cartModal || closeModalBtn) {
+    if (event.target === cartModal) {
+        cartModal.style.display = 'none';
+    } else if(event.target === closeModalBtn) {
         cartModal.style.display = 'none';
     }
 });
