@@ -70,7 +70,7 @@ function updateCartModal() {
                     <p class="font-medium mt-2">R$ ${item.price.toFixed(2)}</p>
                     <br>
                 </div>    
-                <button>Remover</button>
+                <button class="remove-cart-btn" data-name="${item.name}">Remover</button>
             </div>
         `;
 
@@ -84,4 +84,28 @@ function updateCartModal() {
     });
 
     cartCount.innerHTML = cart.length;
+}
+
+//funcção de remover item do carrinho
+cartItemsContainer.addEventListener('click', (event) => {
+    if(event.target.classList.contains('remove-cart-btn')) {
+        const name = event.target.getAttribute('data-name');
+        removeItemCart(name);
+    }
+})
+
+function removeItemCart(name) {
+    const index = cart.findIndex(item => item.name === name);
+
+    if(index !== -1) {
+        const item = cart[index];
+
+        if(item.quantity > 1){
+            item.quantity -= 1;
+            updateCartModal();
+            return;
+        }
+        cart.splice(index, 1);
+        updateCartModal();
+    }
 }
