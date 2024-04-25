@@ -86,7 +86,7 @@ function updateCartModal() {
     cartCount.innerHTML = cart.length;
 }
 
-//funcção de remover item do carrinho
+//função de remover item do carrinho
 cartItemsContainer.addEventListener('click', (event) => {
     if(event.target.classList.contains('remove-cart-btn')) {
         const name = event.target.getAttribute('data-name');
@@ -109,3 +109,22 @@ function removeItemCart(name) {
         updateCartModal();
     }
 }
+
+//validação de endereço de entrega
+addressInput.addEventListener('input',(event) => {
+    let inputValue = event.target.value;
+
+    if(inputValue !== '') {
+        addressInput.classList.remove('border-red-500');
+        addressWarn.classList.add('hidden');
+    }
+});
+
+checkoutBtn.addEventListener('click', () => {
+    if(cart.length === 0) return;
+    if(addressInput.value === '') {
+        addressWarn.classList.remove('hidden');
+        addressInput.classList.add('border-red-500');
+        return;
+    }
+})
