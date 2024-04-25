@@ -120,11 +120,61 @@ addressInput.addEventListener('input',(event) => {
     }
 });
 
+//finalizar pedido
 checkoutBtn.addEventListener('click', () => {
+
+    const isOpen = checkRestOpen();
+    if(!isOpen) {
+        //biblioteca toastify (exibição do alert)
+        Toastify({
+            text: "Ops o restaurante está fechado!",
+            duration: 3000,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+            background: "#ef4444",
+            },
+        }).showToast();
+        return;
+    }
+
     if(cart.length === 0) return;
     if(addressInput.value === '') {
         addressWarn.classList.remove('hidden');
         addressInput.classList.add('border-red-500');
         return;
     }
-})
+
+    //enviar pedido para api whats
+    const cartItems = cart.map((item) => {
+        return(`${item.name} Quantidade: (${item.quantity}) Preço: ${item.price} |`)
+    }).join("");
+
+    const message = encodeURIComponent(cartItems);
+    const phone = "40028922";
+
+    window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, '_blank');
+
+    //zera o carrinho após efetuar o pedido
+    cart = [];
+    updateCartModal();
+});
+
+//verificar a hora e manipular o card horario
+function checkRestOpen() {
+    const data = new Date();
+    const hora = data.getHours();
+    return hora >= 18 && hora < 22; //true 
+}
+
+const isOpen = checkRestOpen();
+
+if(isOpen) {
+    dateSpan.classList.add('bg-green-600');
+    dateSpan.classList.remove('bg-red-500');
+}else {
+    dateSpan.classList.add('bg-red-500');
+    dateSpan.classList.remove('bg-green-600');
+}
